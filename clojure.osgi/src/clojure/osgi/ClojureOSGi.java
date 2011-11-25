@@ -41,7 +41,7 @@ public class ClojureOSGi {
 				REQUIRE = RT.var("clojure.core", "require");
 				OSGI_REQUIRE = RT.var("clojure.osgi.core",
 						"osgi-require");
-				BUNDLE = RT.var("clojure.osgi.core", "*bundle*");
+				BUNDLE = RT.var("clojure.osgi.core", "*bundle*").setDynamic(true);
 				REQUIRE.invoke(Symbol.intern("clojure.main"));
 				REQUIRE.invoke(Symbol.intern("clojure.osgi.core"));
 			} finally {
