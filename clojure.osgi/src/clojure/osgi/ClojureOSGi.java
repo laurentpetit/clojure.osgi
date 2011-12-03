@@ -61,8 +61,9 @@ public class ClojureOSGi {
 		try {
 
 			withBundle(aContext.getBundle(), new RunnableWithException() {
-				public void run() throws Exception {
+				public Object run() throws Exception {
 					OSGI_REQUIRE.invoke(Symbol.intern(aName));
+					return null;
 				}
 			});
 		} catch (Exception aEx) {
@@ -74,9 +75,10 @@ public class ClojureOSGi {
 			final String fullyQualifiedAOTClassName) throws Exception {
 		
 		withBundle(aContext.getBundle(), new RunnableWithException() {
-			public void run() throws Exception {
+			public Object run() throws Exception {
 				Class.forName(fullyQualifiedAOTClassName, true,
 						new BundleClassLoader(aContext.getBundle()));
+				return null;
 			}
 		});
 	}
@@ -86,7 +88,7 @@ public class ClojureOSGi {
 
 		try {
 			withBundle(aContext.getBundle(), new RunnableWithException() {
-				public void run() throws Exception {
+				public Object run() throws Exception {
 					OSGI_REQUIRE.invoke(Symbol.intern(aNamespace));
 
 					String name = "bundle-start";
@@ -96,6 +98,7 @@ public class ClojureOSGi {
 					else
 						throw new Exception(String.format(
 								"'%s' is not bound in '%s'", name, aNamespace));
+					return null;
 				}
 			});
 		} catch (Exception aEx) {
@@ -120,8 +123,9 @@ public class ClojureOSGi {
 						.extractBundleId(url));
 
 				withBundle(bundle, new RunnableWithException() {
-					public void run() throws Exception {
+					public Object run() throws Exception {
 						RT.load(aName);
+						return null;
 					}
 				});
 			} else
@@ -131,7 +135,7 @@ public class ClojureOSGi {
 		}
 	}
 
-	public static void withBundle(Bundle aBundle, RunnableWithException aCode)
+	public static Object withBundle(Bundle aBundle, RunnableWithException aCode)
 			throws Exception {
 		ClassLoader loader = new BundleClassLoader(aBundle);
 		IPersistentMap bindings = RT.map(BUNDLE, aBundle, Compiler.LOADER,
@@ -151,7 +155,7 @@ public class ClojureOSGi {
 				throw aEx;
 			}
 
-			aCode.run();
+			return aCode.run();
 		} finally {
 			if (pushed)
 				Var.popThreadBindings();

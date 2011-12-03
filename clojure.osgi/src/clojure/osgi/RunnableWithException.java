@@ -12,5 +12,5 @@
 package clojure.osgi;
 
 public interface RunnableWithException {
-	void run() throws Exception;
+	Object run() throws Exception;
 }
